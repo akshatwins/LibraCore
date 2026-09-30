@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<div class="mb-4"><p class="eyebrow">INSIGHTS</p><h1 class="page-title">Library analytics</h1><p class="text-secondary">Operational signals from circulation and membership data.</p></div>
+<div class="row g-4">
+<div class="col-lg-7"><div class="panel"><div class="panel-header"><div><h2>Most circulated books</h2><p>Based on recorded issue transactions</p></div></div>
+{% for item in data.popular_books %}
+<div class="bar-row"><div class="bar-label"><span>{{ item.label }}</span><strong>{{ item.value }}</strong></div><div class="bar"><span style="width:{{ [item.value * 12,100]|min }}%"></span></div></div>
+{% else %}<p class="text-secondary">No circulation data yet.</p>{% endfor %}
+</div></div>
+<div class="col-lg-5"><div class="panel"><div class="panel-header"><div><h2>Operational indicators</h2><p>Current platform activity</p></div></div>
+<div class="indicator"><span>Pending reservations</span><strong>{{ data.reservations }}</strong></div>
+<div class="indicator"><span>New members · 30 days</span><strong>{{ data.new_members_30d }}</strong></div>
+</div></div>
+<div class="col-12"><div class="panel"><div class="panel-header"><div><h2>Circulation by category · 30 days</h2><p>Recent lending mix</p></div></div>
+<div class="row g-3">{% for item in data.categories %}<div class="col-md-4"><div class="category-card"><span>{{ item.label }}</span><strong>{{ item.value }}</strong></div></div>{% else %}<p class="text-secondary">No recent category data.</p>{% endfor %}</div>
+</div></div></div>
+{% endblock %}
