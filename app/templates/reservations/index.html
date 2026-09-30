@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Reservations{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+  <div><p class="eyebrow">WAITLIST</p><h1 class="page-title">Reservations</h1><p class="text-secondary mb-0">Track requested books and reservation status.</p></div>
+</div>
+<div class="panel"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th>Book</th><th>Member</th><th>Reserved</th><th>Status</th><th></th></tr></thead>
+<tbody>{% for r in reservations %}
+<tr><td class="fw-semibold">{{ r.book.title }}</td><td>{{ r.member.name }}</td><td>{{ r.reserved_at.strftime('%d %b %Y %H:%M') }}</td>
+<td><span class="status status-{{ 'available' if r.status == 'fulfilled' else 'issued' }}">{{ r.status|title }}</span></td>
+<td class="text-end">{% if r.status == 'pending' and (current_user.id == r.member_id or current_user.role in ['admin','librarian']) %}
+<form method="post" action="{{ url_for('reservations.cancel', reservation_id=r.id) }}"><button class="btn btn-sm btn-outline-danger">Cancel</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="text-center py-5 text-secondary">No reservations.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}
