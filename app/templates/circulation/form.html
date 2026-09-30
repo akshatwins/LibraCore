@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Issue book{% endblock %}
+{% block content %}
+<div class="form-wrap"><div class="mb-4"><p class="eyebrow">CIRCULATION</p><h1 class="page-title">Issue a book</h1><p class="text-secondary">Create a new lending transaction.</p></div>
+<div class="panel"><form method="post" class="vstack gap-3">
+<div><label class="form-label">Member</label><select class="form-select" name="member_id" required><option value="">Select member</option>{% for m in members %}<option value="{{ m.id }}">{{ m.name }} — {{ m.email }}</option>{% endfor %}</select></div>
+<div><label class="form-label">Book</label><select class="form-select" name="book_id" required><option value="">Select available book</option>{% for b in books %}<option value="{{ b.id }}">{{ b.title }} — {{ b.author }} ({{ b.available_copies }} available)</option>{% endfor %}</select></div>
+<div class="info-box"><i class="bi bi-info-circle"></i> Default loan period: <strong>{{ config.LOAN_PERIOD_DAYS }} days</strong>. Fine: <strong>₹{{ config.FINE_PER_DAY }} per overdue day</strong>.</div>
+<div class="d-flex gap-2"><a class="btn btn-light" href="{{ url_for('circulation.index') }}">Cancel</a><button class="btn btn-dark">Issue book</button></div>
+</form></div></div>
+{% endblock %}
