@@ -1,0 +1,15 @@
+services:
+  library:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      SECRET_KEY: "change-this-in-production"
+      DATABASE_URL: "sqlite:////app/instance/library.db"
+      FINE_PER_DAY: "5"
+      LOAN_PERIOD_DAYS: "14"
+    volumes:
+      - library_data:/app/instance
+
+volumes:
+  library_data:
