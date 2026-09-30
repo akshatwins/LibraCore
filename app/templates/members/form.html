@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Register member{% endblock %}
+{% block content %}
+<div class="form-wrap"><div class="mb-4"><p class="eyebrow">PEOPLE</p><h1 class="page-title">Register member</h1><p class="text-secondary">Create a secure member account.</p></div>
+<div class="panel"><form method="post" class="vstack gap-3">
+<div><label class="form-label">Full name</label><input class="form-control" name="name" required></div>
+<div><label class="form-label">Email</label><input class="form-control" type="email" name="email" required></div>
+<div><label class="form-label">Temporary password</label><input class="form-control" type="password" name="password" required minlength="8"></div>
+<div class="d-flex gap-2"><a class="btn btn-light" href="{{ url_for('members.index') }}">Cancel</a><button class="btn btn-dark">Create member</button></div>
+</form></div></div>
+{% endblock %}
