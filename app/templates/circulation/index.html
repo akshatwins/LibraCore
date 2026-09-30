@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Circulation{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+<div><p class="eyebrow">LENDING OPERATIONS</p><h1 class="page-title">Circulation</h1><p class="text-secondary mb-0">Monitor active loans, returns and overdue items.</p></div>
+{% if current_user.role in ['admin','librarian'] %}<a class="btn btn-dark" href="{{ url_for('circulation.issue') }}"><i class="bi bi-box-arrow-up-right"></i> Issue book</a>{% endif %}
+</div>
+<div class="panel mb-4"><div class="panel-header"><div><h2>Active loans</h2><p>Items currently outside the library</p></div></div>
+<div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Book</th><th>Member</th><th>Due date</th><th>Status</th><th></th></tr></thead><tbody>
+{% for loan in active %}<tr><td class="fw-semibold">{{ loan.book.title }}</td><td>{{ loan.member.name }}</td><td>{{ loan.due_date.strftime('%d %b %Y') }}</td><td><span class="status status-{{ loan.status|lower }}">{{ loan.status }}</span></td><td class="text-end d-flex justify-content-end gap-2">
+<form method="post" action="{{ url_for('circulation.renew', loan_id=loan.id) }}"><button class="btn btn-sm btn-outline-secondary" {% if loan.renewal_count >= 2 %}disabled{% endif %}>Renew</button></form>
+<form method="post" action="{{ url_for('circulation.return_loan', loan_id=loan.id) }}"><button class="btn btn-sm btn-dark">Return</button></form>
+</td></tr>{% else %}<tr><td colspan="5" class="text-center py-5 text-secondary">No active loans.</td></tr>{% endfor %}
+</tbody></table></div></div>
+<div class="panel"><div class="panel-header"><div><h2>Return history</h2><p>Recent completed transactions</p></div></div>
+<div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Book</th><th>Member</th><th>Returned</th><th>Fine</th></tr></thead><tbody>
+{% for loan in history %}<tr><td>{{ loan.book.title }}</td><td>{{ loan.member.name }}</td><td>{{ loan.returned_at.strftime('%d %b %Y') }}</td><td>₹{{ '%.2f'|format(loan.fine_amount) }}</td></tr>{% else %}<tr><td colspan="4" class="text-center py-5 text-secondary">No return history.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}
