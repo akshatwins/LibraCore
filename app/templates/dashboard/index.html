@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+  <div><p class="eyebrow">LIBRARY OPERATIONS</p><h1 class="page-title">Dashboard</h1><p class="text-secondary mb-0">A live overview of your collection and circulation activity.</p></div>
+  {% if current_user.role in ['admin','librarian'] %}
+  <a class="btn btn-dark" href="{{ url_for('circulation.issue') }}"><i class="bi bi-plus-lg"></i> Issue a book</a>
+  {% endif %}
+</div>
+
+<div class="row g-3 mb-4">
+{% for key, label, icon in [
+('total_books','Book titles','bi-book'),
+('total_copies','Total copies','bi-stack'),
+('available_copies','Available now','bi-check2-circle'),
+('active_members','Active members','bi-people'),
+('active_loans','Active loans','bi-arrow-left-right'),
+('overdue_loans','Overdue','bi-exclamation-circle')
+] %}
+<div class="col-6 col-xl-2">
+  <div class="metric-card">
+    <div class="metric-icon"><i class="bi {{ icon }}"></i></div>
+    <div class="metric-value">{{ metrics[key] }}</div>
+    <div class="metric-label">{{ label }}</div>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-header"><div><h2>Operations snapshot</h2><p>Monitor the collection without leaving the dashboard.</p></div><a href="{{ url_for('analytics.index') }}">Analytics</a></div>
+      <div class="mini-grid">
+        <div><span>Collection utilization</span><strong>{{ ((metrics.total_copies - metrics.available_copies) / metrics.total_copies * 100)|round(1) if metrics.total_copies else 0 }}%</strong></div>
+        <div><span>Overdue rate</span><strong>{{ ((metrics.overdue_loans / metrics.active_loans) * 100)|round(1) if metrics.active_loans else 0 }}%</strong></div>
+        <div><span>Inventory availability</span><strong>{{ ((metrics.available_copies / metrics.total_copies) * 100)|round(1) if metrics.total_copies else 0 }}%</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-header"><div><h2>Notifications</h2><p>Recent system alerts</p></div></div>
+      {% for n in notifications %}
+      <div class="notification-row"><div class="notification-dot notification-{{ n.type }}"></div><div><strong>{{ n.title }}</strong><p>{{ n.message }}</p></div></div>
+      {% else %}<p class="text-secondary mb-0">No unread notifications.</p>{% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-header"><div><h2>Recent circulation</h2><p>Latest lending activity</p></div><a href="{{ url_for('circulation.index') }}">View all</a></div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead><tr><th>Book</th><th>Member</th><th>Due</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for loan in recent %}
+          <tr><td class="fw-semibold">{{ loan.book.title }}</td><td>{{ loan.member.name }}</td><td>{{ loan.due_date.strftime('%d %b %Y') }}</td><td><span class="status status-{{ loan.status|lower }}">{{ loan.status }}</span></td></tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center py-5 text-secondary">No circulation records yet.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel h-100">
+      <div class="panel-header"><div><h2>Quick actions</h2><p>Common librarian workflows</p></div></div>
+      <div class="quick-list">
+        <a href="{{ url_for('books.create') }}"><i class="bi bi-journal-plus"></i><span>Add a new book<small>Expand the catalog</small></span><i class="bi bi-chevron-right"></i></a>
+        <a href="{{ url_for('members.create') }}"><i class="bi bi-person-plus"></i><span>Register member<small>Create a library account</small></span><i class="bi bi-chevron-right"></i></a>
+        <a href="{{ url_for('circulation.issue') }}"><i class="bi bi-box-arrow-up-right"></i><span>Issue a book<small>Start a loan</small></span><i class="bi bi-chevron-right"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
