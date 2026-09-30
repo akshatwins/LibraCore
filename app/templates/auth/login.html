@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<div class="login-shell">
+  <div class="login-card">
+    <div class="brand-lockup mb-4"><span class="brand-mark">L</span><span>LibraCore</span></div>
+    <h1 class="h3 fw-bold">Welcome back</h1>
+    <p class="text-secondary mb-4">Sign in to manage the library.</p>
+    <form method="post" class="vstack gap-3">
+      <div><label class="form-label">Email</label><input class="form-control form-control-lg" type="email" name="email" required></div>
+      <div><label class="form-label">Password</label><input class="form-control form-control-lg" type="password" name="password" required></div>
+      <button class="btn btn-dark btn-lg">Sign in <i class="bi bi-arrow-right ms-1"></i></button>
+    </form>
+    <div class="demo-note mt-4">
+      <strong>Demo access</strong><br>
+      admin@library.local / Admin@123
+    </div>
+  </div>
+</div>
+{% endblock %}
