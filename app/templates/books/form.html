@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add book{% endblock %}
+{% block content %}
+<div class="form-wrap"><div class="mb-4"><p class="eyebrow">CATALOG</p><h1 class="page-title">Add a book</h1><p class="text-secondary">Create a structured catalog record.</p></div>
+<div class="panel"><form method="post" class="row g-3">
+<div class="col-md-4"><label class="form-label">ISBN</label><input class="form-control" name="isbn" required></div>
+<div class="col-md-8"><label class="form-label">Title</label><input class="form-control" name="title" required></div>
+<div class="col-md-6"><label class="form-label">Author</label><input class="form-control" name="author" required></div>
+<div class="col-md-6"><label class="form-label">Category</label><input class="form-control" name="category" required></div>
+<div class="col-md-6"><label class="form-label">Publisher</label><input class="form-control" name="publisher"></div>
+<div class="col-md-3"><label class="form-label">Publication year</label><input class="form-control" type="number" name="publication_year" min="1000" max="2100"></div>
+<div class="col-md-3"><label class="form-label">Total copies</label><input class="form-control" type="number" name="total_copies" value="1" min="1"></div>
+<div class="col-md-4"><label class="form-label">Shelf / location</label><input class="form-control" name="shelf" placeholder="A-12"></div>
+<div class="col-12"><label class="form-label">Description</label><textarea class="form-control" rows="4" name="description"></textarea></div>
+<div class="col-12 d-flex gap-2"><a class="btn btn-light" href="{{ url_for('books.index') }}">Cancel</a><button class="btn btn-dark">Save book</button></div>
+</form></div></div>
+{% endblock %}
